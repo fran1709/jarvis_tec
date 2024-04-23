@@ -42,12 +42,6 @@
         <li>JavaScript (ES6+)</li>
         <li>API de reconocimiento de voz del navegador</li>
     </ul>
-    <h2>Autor</h2>
-    <p>Desarrollado por Francisco</p>
-    <h2>Contribuciones</h2>
-    <p>Las contribuciones son bienvenidas. Si encuentras algún problema o tienes alguna sugerencia, por favor crea un nuevo issue o envía un pull request.</p>
-    <h2>Licencia</h2>
-    <p>Este proyecto está bajo la licencia [Licencia]. Consulta el archivo LICENSE para obtener más detalles.</p>
 </body>
 
 </html>
