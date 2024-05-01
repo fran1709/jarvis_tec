@@ -1,4 +1,4 @@
-export const medidasCuerpo = {
+export const personalData = {
     "Age": [30],
     "Weight": [70],
     "Height": [170],

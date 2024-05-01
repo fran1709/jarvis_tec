@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from controllers.wineQualityController import predict_wineQuality
 from controllers.avocadoPriceController import predict_avocadoPrice
 from controllers.areFatController import predict_obesity
 from flask_cors import CORS
@@ -16,6 +17,12 @@ def areFat():
 def avocadoPrice():
     data = request.json
     prediction = predict_avocadoPrice(data)
+    return jsonify({"prediction": prediction})
+
+@app.route('/wine', methods=['POST'])
+def wineQuality():
+    data = request.json
+    prediction = predict_wineQuality(data)
     return jsonify({"prediction": prediction})
 
 if __name__ == '__main__':
