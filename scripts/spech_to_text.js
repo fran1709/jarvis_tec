@@ -1,7 +1,8 @@
 // spech_to_text.js
 import { avocadoData } from "../myData/avocadoData.js";
+import { houseData } from "../myData/houseData.js";
 import { personalData } from "../myData/personalData.js";
-import { wineData } from "../myData/weineData.js";
+import { wineData } from "../myData/wineData.js";
 
 const btnStart = document.getElementById('btnStart');
 const btnStop = document.getElementById('btnStop');
@@ -120,6 +121,32 @@ function ejecutarAccion(texto) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(wineData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('La solicitud no pudo ser completada.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.prediction) {
+                    console.log('Predicción:', data.prediction);
+                    responder(data.prediction);
+                } else {
+                    responder('No se pudo obtener una predicción.');
+                }
+            })
+            .catch(error => {
+                responder('Error al procesar las medidas del cuerpo:', error);
+            }
+        );
+    } else if (texto.includes('casa')) {
+        fetch('http://localhost:5000/house', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(houseData)
             })
             .then(response => {
                 if (!response.ok) {
