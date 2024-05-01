@@ -1,4 +1,6 @@
 // spech_to_text.js
+import { avocadoData } from "../myData/avocadoData.js";
+import { medidasCuerpo } from "../myData/personalData.js";
 
 const btnStart = document.getElementById('btnStart');
 const btnStop = document.getElementById('btnStop');
@@ -43,7 +45,7 @@ function ejecutarAccion(texto) {
     if (texto.includes('hola')) {
         responder('¡Hola! ¿En qué puedo ayudarte?');
     } else if (texto.includes('buenas noches')) {
-        responder('¡Buenas noches!');
+        responder('¡Hasta pronto, buenas noches!');
         recognition.abort();
         isListening = false; // Actualiza el estado de la escucha
         updateListeningStatus(); // Actualiza el estado de la escucha en la interfaz
@@ -52,8 +54,64 @@ function ejecutarAccion(texto) {
             hour: 'numeric',
             minute: 'numeric',
             hour12: true
-        });        
+        });
         responder(`La hora actual es ${time}`);
+    } else if (texto.includes('predicciones' || ' hacer')) {
+        responder('Puedo decirte si tienes sobrepeso, el valor de las propiedades en la bolsa, el precio del aguacate, calificar un vino, el precio de un auto');
+    } else if (texto.includes('gracias')) {
+        responder('Con mucho gusto estoy para servirte!')
+    } else if (texto.includes('sobrepeso')) {
+        fetch('http://localhost:5000/areFat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(medidasCuerpo)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('La solicitud no pudo ser completada.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.prediction) {
+                    console.log('Predicción:', data.prediction);
+                    responder(data.prediction);
+                } else {
+                    responder('No se pudo obtener una predicción.');
+                }
+            })
+            .catch(error => {
+                responder('Error al procesar las medidas del cuerpo:', error);
+            }
+        );
+    } else if (texto.includes('aguacate')) {
+        fetch('http://localhost:5000/avocado', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(avocadoData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('La solicitud no pudo ser completada.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.prediction) {
+                    console.log('Predicción:', data.prediction);
+                    responder(data.prediction);
+                } else {
+                    responder('No se pudo obtener una predicción.');
+                }
+            })
+            .catch(error => {
+                responder('Error al procesar las medidas del cuerpo:', error);
+            }
+        );
     } else {
         responder('Lo siento, no entendí lo que dijiste.');
     }
