@@ -59,7 +59,7 @@ function ejecutarAccion(texto) {
         });
         responder(`La hora actual es ${time}`);
     } else if (texto.includes('predicciones' || ' hacer')) {
-        responder('Puedo decirte si tienes sobrepeso, el valor de las propiedades en la bolsa, el precio del aguacate, calificar un vino, el precio de un auto');
+        responder('De momento está en mi capacidad decirte si tienes sobrepeso, el valor de una tu casa, el precio del aguacate, calificar un vino.');
     } else if (texto.includes('gracias')) {
         responder('Con mucho gusto! estoy para servirte.')
     } else if (texto.includes('sobrepeso')) {
