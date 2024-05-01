@@ -58,8 +58,8 @@ function ejecutarAccion(texto) {
             hour12: true
         });
         responder(`La hora actual es ${time}`);
-    } else if (texto.includes('predicciones' || ' hacer')) {
-        responder('De momento está en mi capacidad decirte si tienes sobrepeso, el valor de una tu casa, el precio del aguacate, calificar un vino.');
+    } else if (texto.includes('hacer') || texto.includes('predicciones')) {
+        responder('De momento está en mi capacidad decirte si tienes sobrepeso, el valor de tu casa, el precio del aguacate, calificar un vino. Todo esto según parámetros establecidos en mi sistema.');
     } else if (texto.includes('gracias')) {
         responder('Con mucho gusto! estoy para servirte.')
     } else if (texto.includes('sobrepeso')) {
