@@ -39,19 +39,19 @@ def housePrice():
 def stroke():
     data = request.json
     prediction = predict_stroke(data)
-    return jsonify({"Prediction" : prediction})
+    return jsonify({"prediction" : prediction})
 
 @app.route('/phone', methods=['POST'])
 def phone():
     data = request.json
     prediction = predict_phone(data)
-    return jsonify({"Prediction" : prediction})
+    return jsonify({"prediction" : prediction})
 
 @app.route('/car', methods=['POST'])
 def car():
     data = request.json
     prediction = predict_car(data)
-    return jsonify({"Prediction" : prediction})
+    return jsonify({"prediction" : prediction})
 
 if __name__ == '__main__':
     app.run(debug=True)

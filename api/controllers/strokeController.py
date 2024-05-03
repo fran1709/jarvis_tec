@@ -11,4 +11,4 @@ def predict_stroke(data):
     new_df = pd.DataFrame(data)
     prediction = loaded_model.predict(new_df)
     print(prediction)
-    return "Según sus parametros, sí tiene riesgo de un ataque cerebro-vascular" if prediction[0] == 0 else "Según sus parametros, no tiene riesgo de un ataque cerebro-vascular"
+    return "Según sus parámetros, sí tiene riesgo de un ataque cerebro-vascular" if prediction[0] == 0 else "Según sus parámetros, no tiene riesgo de un ataque cerebro-vascular"

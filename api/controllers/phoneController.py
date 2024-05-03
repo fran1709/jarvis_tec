@@ -11,4 +11,4 @@ def predict_phone(data):
     new_df = pd.DataFrame(data)
     prediction = loaded_model.predict(new_df)
     print(prediction)
-    return "Según sus parametros, el cliente no cambiará de empresa." if prediction[0] == 0 else "Según sus parametros, el cliente sí cambiará de empresa."
+    return "Según sus parámetros, el cliente no cambiará de empresa." if prediction[0] == 0 else "Según sus parámetros, el cliente sí cambiará de empresa."
