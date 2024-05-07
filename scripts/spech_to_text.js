@@ -63,7 +63,7 @@ function ejecutarAccion(texto) {
     responder(`La hora actual es ${time}`);
   } else if (texto.includes("hacer") || texto.includes("predicciones")) {
     responder(
-      "De momento está en mi capacidad decirte si tienes sobrepeso, el valor de tu casa, el precio del aguacate, calificar un vino, el precio de un auto, si una persona cambiara de emprese telefonica, si tendras un accidente cerebro vascular. Todo esto según parámetros establecidos en mi sistema."
+      "Está en mi capacidad decirte si tienes sobrepeso, el valor de tu casa, el precio del aguacate, calificar un vino, el precio de un auto, si una persona cambiará de empresa telefónica, si tendrás un accidente cerebro vascular."
     );
   } else if (texto.includes("gracias")) {
     responder("Con mucho gusto! estoy para servirte.");
