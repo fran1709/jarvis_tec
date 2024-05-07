@@ -3,10 +3,13 @@ from controllers.housePriceController import predict_housePrice
 from controllers.wineQualityController import predict_wineQuality
 from controllers.avocadoPriceController import predict_avocadoPrice
 from controllers.areFatController import predict_obesity
+from controllers.strokeController import predict_stroke
+from controllers.phoneController import predict_phone
+from controllers.carPricesController import predict_car
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
+CORS(app)   
 
 @app.route('/areFat', methods=['POST'])
 def areFat():
@@ -31,6 +34,24 @@ def housePrice():
     data = request.json
     prediction = predict_housePrice(data)
     return jsonify({"prediction": prediction})
+
+@app.route('/stroke', methods=['POST'])
+def stroke():
+    data = request.json
+    prediction = predict_stroke(data)
+    return jsonify({"prediction" : prediction})
+
+@app.route('/phone', methods=['POST'])
+def phone():
+    data = request.json
+    prediction = predict_phone(data)
+    return jsonify({"prediction" : prediction})
+
+@app.route('/car', methods=['POST'])
+def car():
+    data = request.json
+    prediction = predict_car(data)
+    return jsonify({"prediction" : prediction})
 
 if __name__ == '__main__':
     app.run(debug=True)
