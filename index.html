@@ -10,22 +10,25 @@
       rel="stylesheet"
     />
     <!-- Material Icons -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
     <style>
-        body {
-            background-image: url('shared/image02.png');
-            background-size: cover;
-            background-position: center;
-            background-color: #263238;
-            color: #FFF;
-            font-family: 'Roboto', sans-serif;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+      body {
+        background-image: url("shared/image02.png");
+        background-size: cover;
+        background-position: center;
+        background-color: #263238;
+        color: #fff;
+        font-family: "Roboto", sans-serif;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
 
       textarea {
         width: 80%;
@@ -41,54 +44,139 @@
         color: #fff;
         margin-bottom: 20px;
       }
+
+      #videoElement {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+      }
+
+      #canvas {
+        display: none;
+      }
     </style>
   </head>
 
   <body>
-    <div class="container">
-
-        <button id="btnStart" class="btn btn-primary"><i class="material-icons">mic</i> COMENZAR</button>
-        <button id="btnStop" class="btn btn-danger"><i class="material-icons">mic_off</i> DETENER</button>
-
-        <div class="row">
-            <div class="col">
-                <h2>Mi petición</h2>
-                <textarea title="solicitud" readonly id="inputText"></textarea>
-            </div>
-
-            <div class="col">
-                <h2>Respuesta</h2>
-                <textarea title="respuesta" id="responseText" readonly></textarea>
-            </div>
+    <div
+      class="modal fade"
+      id="startModal"
+      tabindex="-1"
+      aria-labelledby="startModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title text-dark" id="startModalLabel">
+              Bienvenido
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body text-dark">
+            Presiona el botón para comenzar.
+            <video id="videoElement"></video>
+            <button id="captureButton" class="btn btn-primary mt-3">
+              Capturar Imagen
+            </button>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-bs-dismiss="modal"
+              id="modalStartButton"
+            >
+              Comenzar
+            </button>
+          </div>
         </div>
-
-        <p id="listeningStatus"></p> <!-- Elemento para mostrar el estado de la escucha -->
-        
-        <div class="row">
-            <div class="col">
-                <h2>Lectura de Rostro</h2>
-                <textarea title="rostro" id="faceData" readonly></textarea>
-            </div>
-        </div>
-
-        
+      </div>
     </div>
 
+    <div class="container">
+      <button id="btnStart" class="btn btn-primary">
+        <i class="material-icons">mic</i> COMENZAR
+      </button>
+      <button id="btnStop" class="btn btn-danger">
+        <i class="material-icons">mic_off</i> DETENER
+      </button>
 
+      <div class="row">
+        <div class="col">
+          <h2>Mi petición</h2>
+          <textarea title="solicitud" readonly id="inputText"></textarea>
+        </div>
+
+        <div class="col">
+          <h2>Respuesta</h2>
+          <textarea title="respuesta" id="responseText" readonly></textarea>
+        </div>
+      </div>
+
+      <p id="listeningStatus"></p>
+      <!-- Elemento para mostrar el estado de la escucha -->
+
+      <div class="row">
+        <div class="col">
+          <h2>Lectura de Rostro</h2>
+          <textarea title="rostro" id="faceData" readonly></textarea>
+        </div>
+      </div>
+    </div>
 
     <!-- MorphCast scripts -->
-    <script src="https://sdk.morphcast.com/mphtools/v1.1/mphtools.js"
-        data-config="cameraPrivacyPopup, compatibilityUI, compatibilityAutoCheck"></script>
+    <script
+      src="https://sdk.morphcast.com/mphtools/v1.1/mphtools.js"
+      data-config="cameraPrivacyPopup, compatibilityUI, compatibilityAutoCheck"
+    ></script>
     <script src="https://ai-sdk.morphcast.com/v1.16/ai-sdk.js"></script>
     <script src="./scripts/morph_cast.js"></script>
-    
+
     <!-- Your custom JavaScript -->
     <script type="module" src="./scripts/spech_to_text.js"></script>
-    
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
 
-</body>
+    <script>
+      window.onload = function() {
+        var myModal = new bootstrap.Modal(document.getElementById('startModal'), {
+          keyboard: false
+        });
+        myModal.show();
+      };
 
+      const videoElement = document.getElementById('videoElement');
+      const canvas = document.getElementById('canvas');
+      const captureButton = document.getElementById('captureButton');
+
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then((stream) => {
+          videoElement.srcObject = stream;
+          videoElement.play();
+        })
+        .catch((err) => {
+          console.error("Error accessing the camera: ", err);
+        });
+
+      captureButton.addEventListener('click', () => {
+        const context = canvas.getContext('2d');
+        canvas.width = videoElement.videoWidth;
+        canvas.height = videoElement.videoHeight;
+        context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+        const imageData = canvas.toDataURL('image/png');
+        console.log("Captured image data: ", imageData);
+      });
+
+      document.getElementById('modalStartButton').addEventListener('click', function() {
+        console.log("Application started");
+      });
+    </script>
+  </body>
 </html>
