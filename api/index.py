@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from controllers.faceReconController import predict_Face, recognize_face
 from controllers.housePriceController import predict_housePrice
 from controllers.wineQualityController import predict_wineQuality
 from controllers.avocadoPriceController import predict_avocadoPrice
@@ -51,6 +52,12 @@ def phone():
 def car():
     data = request.json
     prediction = predict_car(data)
+    return jsonify({"prediction" : prediction})
+
+@app.route('/faceRecon', methods=['POST'])
+def faceRecon():
+    data = request.json
+    prediction = predict_Face(data)
     return jsonify({"prediction" : prediction})
 
 if __name__ == '__main__':

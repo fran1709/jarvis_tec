@@ -80,7 +80,7 @@
           </div>
           <div class="modal-body text-dark">
             Presiona el botón para comenzar.
-            <video id="videoElement"></video>
+            <video id="videoElement" autoplay></video>
             <button id="captureButton" class="btn btn-primary mt-3">
               Capturar Imagen
             </button>
@@ -98,11 +98,8 @@
         </div>
       </div>
     </div>
-
     <div class="container">
-      <canvas id="canvas">
-        
-      </canvas>
+      <canvas id="canvas"> </canvas>
       <button id="btnStart" class="btn btn-primary">
         <i class="material-icons">mic</i> COMENZAR
       </button>
@@ -148,18 +145,20 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-      window.onload = function() {
-        var myModal = new bootstrap.Modal(document.getElementById('startModal'), {
-          keyboard: false
-        });
+      window.onload = function () {
+        var myModal = new bootstrap.Modal(
+          document.getElementById("startModal"),
+          {
+            keyboard: false,
+          }
+        );
         myModal.show();
       };
-
-      const videoElement = document.getElementById('videoElement');
-      const canvas = document.getElementById('canvas');
-      const captureButton = document.getElementById('captureButton');
-
-      navigator.mediaDevices.getUserMedia({ video: true })
+      const videoElement = document.getElementById("videoElement");
+      const canvas = document.getElementById("canvas");
+      const captureButton = document.getElementById("captureButton");
+      navigator.mediaDevices
+        .getUserMedia({ video: true })
         .then((stream) => {
           videoElement.srcObject = stream;
           videoElement.play();
@@ -167,19 +166,47 @@
         .catch((err) => {
           console.error("Error accessing the camera: ", err);
         });
-
-      captureButton.addEventListener('click', () => {
-        const context = canvas.getContext('2d');
+      captureButton.addEventListener("click", () => {
+        const context = canvas.getContext("2d");
         canvas.width = videoElement.videoWidth;
         canvas.height = videoElement.videoHeight;
         context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
-        const imageData = canvas.toDataURL('image/png');
-        console.log("Captured image data: ", imageData);
+        const imgStr = canvas.toDataURL();
+        console.log(imgStr);
+        canvas.toBlob((blob) => {
+          console.log(blob);
+          localStorage.setItem("data", blob);
+        });
+        canvas.toBlob((blob) => {
+          const formData = new FormData();
+          console.log(`this is blob ${blob.JSON}`);
+          formData.append("file", blob, "captured_image.png");
+          fetch("http://localhost:5000/faceRecon", {
+            method: "POST",
+            body: JSON.stringify({ string: imgStr }),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error(
+                  "Network response was not ok " + response.statusText
+                );
+              }
+              return response.json();
+            })
+            .then((data) => {
+              console.log("Predicción:", data.prediction);
+              document.getElementById("faceData").value = data.prediction;
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        }, "image/png");
       });
-
-      document.getElementById('modalStartButton').addEventListener('click', function() {
-        console.log("Application started");
-      });
+      document
+        .getElementById("modalStartButton")
+        .addEventListener("click", function () {
+          console.log("Application started");
+        });
     </script>
   </body>
 </html>
